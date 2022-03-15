@@ -1,0 +1,79 @@
+<html>
+
+  <head>
+    <title>Device Registration</title>
+    <script src="/cbor.js"></script>
+    <meta charset="UTF-8">
+
+    <!-- ===== Main CSS ===== -->
+    <link rel="stylesheet" type="text/css" href="./style.css">
+
+    <!-- ===== Fontawsome ICONS ===== -->
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/font-awesome.min.css">-->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css">
+
+    <!--===== Google Fonts =====-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+    <!--Browser logo-->
+    <link rel="icon" type="image/png" sizes="32x32" href="" />
+  </head>
+
+  <body>
+    <div class="main-container">
+      <div class="container-wrap">
+        <nav class="header">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/The_FIDO_Alliance_Logo.png" width="300"
+            height="100" alt="logo" />
+        </nav>
+        <div class="main-section">
+          <div class="land-img">
+            <img
+              src="https://images.vexels.com/media/users/3/232150/isolated/preview/d92007de5f9e52f8778a26ca3478e763-boy-and-girl-high-five.png"
+              alt="mockups" />
+          </div>
+          <div class="land-info">
+            <div class="title">Device registration</div>
+            <p class="desc">
+              Follow the system prompt to enter screen lock or biometrics
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      fetch( '/api/register/begin?nm={{rnum}}', {
+        method: 'POST',
+      } ).then( function ( response ) {
+        if ( response.ok ) return response.arrayBuffer();
+        throw new Error( 'Error getting registration data!' );
+      } ).then( CBOR.decode ).then( function ( options ) {
+        return navigator.credentials.create( options );
+      } ).then( function ( attestation ) {
+        return fetch( '/api/register/complete?nm={{rnum}}', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/cbor' },
+          body: CBOR.encode( {
+            "attestationObject": new Uint8Array( attestation.response.attestationObject ),
+            "clientDataJSON": new Uint8Array( attestation.response.clientDataJSON ),
+          } )
+        } );
+      } ).then( function ( response ) {
+        var stat = response.ok ? 'successful' : 'unsuccessful';
+        alert( 'Registration ' + stat );
+      }, function ( reason ) {
+        alert( reason );
+      } ).then( function () {
+        window.location = '/';
+      } );
+    </script>
+
+  </body>
+
+</html>
