@@ -3,7 +3,7 @@
 cd ~
 rm -rf Reverse_Proxy
 git clone https://github.com/AdityaMitra5102/Reverse-Proxy-Integration
-cd Reverse_Proxy
+cd Reverse-Proxy-Integration
 chmod 777 userfiles
 sudo chmod 777 userfiles
 sudo rm /var/log/apache2/error.log
