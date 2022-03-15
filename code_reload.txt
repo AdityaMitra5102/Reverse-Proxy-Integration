@@ -8,6 +8,8 @@ chmod 777 userfiles
 sudo chmod 777 userfiles
 sudo rm /var/log/apache2/error.log
 sudo rm /var/log/apache2/access.log
+cd ~
+mv Reverse-Proxy-Integration Reverse_Proxy
 sudo service apache2 restart
  
  
