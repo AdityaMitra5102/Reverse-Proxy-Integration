@@ -1,7 +1,7 @@
 #Copy these lines and paste it on cloud VM ssh terminal to reload code from this repository.
 
 cd ~
-rm -rf Reverse_Proxy
+rm -rf Reverse-Proxy-Integration
 git clone https://github.com/AdityaMitra5102/Reverse-Proxy-Integration
 cd Reverse-Proxy-Integration
 chmod 777 userfiles
