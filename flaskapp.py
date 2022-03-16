@@ -122,6 +122,8 @@ def getportal():
 		cidcook=request.cookies.get('cid')
 		if cidcook is None:
 			cid='0'
+		else:
+			cid=cidcook
 	except:
 		cid='0'
 	setcookies=0
