@@ -9,6 +9,7 @@ from flask import *
 from sqltasks import *
 from otp import *
 from os import path
+from datetime import datetime
 import pickle
 import string
 import random
@@ -48,6 +49,8 @@ f1=Fernet(key1)
 f2=Fernet(key2)
 credentials = []
 
+dtformat="%Y-%m-%d-%H-%M-%S"
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -78,9 +81,16 @@ def reginit():
 @app.route("/markattendance", methods=["GET"])
 def markattendance():
 	try:
-		classid=request.args.get('classId')
-		rnum=request.cookies.get('rnum')
-		return render_template("authenticate.html",rnum=rnum, cid=classid)
+		token=request.args.get('classId')
+		x=f1.decrypt(classid).decode()
+		xarr=x.split('$')
+		cid=xarr[0]
+		tm=xarr[1]
+		if timeValid(tm):
+			rnum=request.cookies.get('rnum')
+			return render_template("authenticate.html",rnum=rnum, cid=classid)
+		else:
+			return render_template("error.html", reason='QR Code expired')
 	except:
 		return redirect("/attendance")
 	
@@ -107,8 +117,30 @@ def downloadattendance():
 	
 @app.route("/getportal")
 def getportal():
-	cid=random.randint(0,999999)
-	return render_template("instructor.html",url=url,cid=cid)
+	cid=0
+	try:
+		cid=request.cookies.get('cid')
+	except:
+		cid=0
+	setcookies=0
+	if cid==0:
+		setcookies=1
+		cid=random.randint(100000,999999)
+	now=datetime.now()
+	nowstr=now.strftime(dtformat)
+	x=str(cid)+'$'+nowstr
+	token=f1.encrypt(x.encode()).decode()
+	if setcookies==0:
+		return render_template("instructor.html",url=url,cid=token)
+	else:
+		resp=make_response(render_template("instructor.html",url=url,cid=token))
+		resp.set_cookie('cid',cid)
+		
+@app.route("/attendanceportal)
+def attendanceportal():
+	resp=make_response(redirect("/getportal"))
+	resp.set_cookie('cid',0)
+	return resp
 	
 @app.route("/resumeportal")
 def resumeportal():
@@ -248,6 +280,13 @@ def authenticate_complete():
     print("Attendance marking for "+user+" in class "+classid);
     addUser(user,classid)    
     return cbor.encode({"status": "OK"})
+    
+def timeValid(tmstr):
+	now=datetime.now()
+	dtm=datetime.strptime(tmstr,dtformat)
+	expdt=dtm+timedelta(seconds=5) #Seconds to scan
+	k=expdt>=now
+	return k
     
 def savekey(credentials,user):
 	with open(filepth+user+'datafilekey.pkl','wb') as outp1:
