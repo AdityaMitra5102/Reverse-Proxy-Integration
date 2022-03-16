@@ -80,19 +80,16 @@ def reginit():
 
 @app.route("/markattendance", methods=["GET"])
 def markattendance():
-	try:
-		token=request.args.get('classId')
-		x=f1.decrypt(classid).decode()
-		xarr=x.split('$')
-		cid=xarr[0]
-		tm=xarr[1]
-		if timeValid(tm):
-			rnum=request.cookies.get('rnum')
-			return render_template("authenticate.html",rnum=rnum, cid=classid)
-		else:
-			return render_template("error.html", reason='QR Code expired')
-	except:
-		return redirect("/attendance")
+	token=request.args.get('classId')
+	x=f1.decrypt(classid).decode()
+	xarr=x.split('$')
+	cid=xarr[0]
+	tm=xarr[1]
+	if timeValid(tm):
+		rnum=request.cookies.get('rnum')
+		return render_template("authenticate.html",rnum=rnum, cid=classid)
+	else:
+		return render_template("error.html", reason='QR Code expired')
 	
 @app.route("/attendance")
 def attendance():
