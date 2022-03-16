@@ -125,11 +125,12 @@ def getportal():
 	setcookies=0
 	if cid==0:
 		setcookies=1
-		cid=random.randint(100000,999999)
+		cid=random.randint(0,999999)
 	now=datetime.now()
 	nowstr=now.strftime(dtformat)
 	x=str(cid)+'$'+nowstr
 	token=f1.encrypt(x.encode()).decode()
+	print(x)
 	if setcookies==0:
 		return render_template("instructor.html",url=url,cid=token, cidplain=cid)
 	else:
