@@ -10,7 +10,7 @@ from sqltasks import *
 from otp import *
 from os import path
 from datetime import *
-import shortuuid
+import uuid
 import pickle
 import string
 import random
@@ -43,8 +43,6 @@ createTable()
 createStudentTable()
 createTokenTable()
 
-alphabet = string.ascii_lowercase + string.digits
-su = shortuuid.ShortUUID(alphabet=alphabet)
 
 inp1=open(filepth+'fernetkey1.pkl', 'rb')
 key1=pickle.load(inp1)
@@ -134,7 +132,7 @@ def getportal():
 	now=datetime.now()
 	nowstr=now.strftime(dtformat)
 	
-	uid=su.random(length=8)
+	uid=str(uuid.uuid4())[:8]
 	addToken(cid,nowstr,uid)
 
 	if setcookies==0:
