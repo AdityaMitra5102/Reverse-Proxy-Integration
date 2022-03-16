@@ -119,7 +119,9 @@ def downloadattendance():
 def getportal():
 	cid='0'
 	try:
-		cid=request.cookies.get('cid')
+		cidcook=request.cookies.get('cid')
+		if cidcook is None:
+			cid='0'
 	except:
 		cid='0'
 	setcookies=0
