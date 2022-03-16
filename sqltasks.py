@@ -101,17 +101,21 @@ def createTokenTable():
 		pass
 
 def addToken(cid, tm, uid):
-	try:
-		command = 'INSERT INTO [Token] VALUES (?,?,?)'	
-		cursor.execute(command,cid, tm, uid)
-		cursor.commit()
-	except:
-		try:
-			command='UPDATE [Token] SET tm=?, uid=? WHERE cid=?'
-			cursor.execute(command, tm, uid, cid)	
-			cursor.commit()
-		except:
-			print('CANT ADD')
+	command = 'INSERT INTO [Token] VALUES (?,?,?)'	
+	cursor.execute(command,cid, tm, uid)
+	cursor.commit()
+
+	#try:
+	#	command = 'INSERT INTO [Token] VALUES (?,?,?)'	
+	#	cursor.execute(command,cid, tm, uid)
+	#	cursor.commit()
+	#except:
+	#	try:
+	#		command='UPDATE [Token] SET tm=?, uid=? WHERE cid=?'
+	#		cursor.execute(command, tm, uid, cid)	
+	#		cursor.commit()
+	#	except:
+	#		print('CANT ADD')
 
 def getCidFromToken(uid):
 	try:
