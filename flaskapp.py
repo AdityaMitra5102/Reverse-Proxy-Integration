@@ -139,6 +139,7 @@ def getportal():
 	else:
 		resp=make_response(render_template("instructor.html",url=url,cid=token,cidplain=cid))
 		resp.set_cookie('cid',cid)
+		return resp
 		
 @app.route("/attendanceportal")
 def attendanceportal():
