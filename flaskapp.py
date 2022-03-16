@@ -131,9 +131,9 @@ def getportal():
 	x=str(cid)+'$'+nowstr
 	token=f1.encrypt(x.encode()).decode()
 	if setcookies==0:
-		return render_template("instructor.html",url=url,cid=token)
+		return render_template("instructor.html",url=url,cid=token, cidplain=cid)
 	else:
-		resp=make_response(render_template("instructor.html",url=url,cid=token))
+		resp=make_response(render_template("instructor.html",url=url,cid=token,cidplain=cid))
 		resp.set_cookie('cid',cid)
 		
 @app.route("/attendanceportal)
