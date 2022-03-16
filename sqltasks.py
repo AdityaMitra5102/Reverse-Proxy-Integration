@@ -95,27 +95,23 @@ def getEmail(reg):
 
 def createTokenTable():
 	try:
-		cursor.execute("CREATE TABLE [Token](cid VARCHAR(10) UNIQUE, tm VARCHAR(10), uid VARCHAR(10))")
+		cursor.execute("CREATE TABLE [Token](cid VARCHAR(10) UNIQUE, tm VARCHAR(30), uid VARCHAR(10))")
 		cursor.commit()
 	except:
 		pass
 
 def addToken(cid, tm, uid):
-	command = 'INSERT INTO [Token] VALUES (?,?,?)'	
-	cursor.execute(command,cid, tm, uid)
-	cursor.commit()
-
-	#try:
-	#	command = 'INSERT INTO [Token] VALUES (?,?,?)'	
-	#	cursor.execute(command,cid, tm, uid)
-	#	cursor.commit()
-	#except:
-	#	try:
-	#		command='UPDATE [Token] SET tm=?, uid=? WHERE cid=?'
-	#		cursor.execute(command, tm, uid, cid)	
-	#		cursor.commit()
-	#	except:
-	#		print('CANT ADD')
+	try:
+		command = 'INSERT INTO [Token] VALUES (?,?,?)'	
+		cursor.execute(command,cid, tm, uid)
+		cursor.commit()
+	except:
+		try:
+			command='UPDATE [Token] SET tm=?, uid=? WHERE cid=?'
+			cursor.execute(command, tm, uid, cid)	
+			cursor.commit()
+		except:
+			print('CANT ADD')
 
 def getCidFromToken(uid):
 	try:
