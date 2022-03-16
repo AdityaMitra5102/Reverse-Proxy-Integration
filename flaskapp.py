@@ -288,7 +288,7 @@ def authenticate_complete():
 def timeValid(tmstr):
 	now=datetime.now()
 	dtm=datetime.strptime(tmstr,dtformat)
-	expdt=dtm+timedelta(seconds=5) #Seconds to scan
+	expdt=dtm+timedelta(seconds=15) #Seconds to scan
 	k=expdt>=now
 	return k
     
