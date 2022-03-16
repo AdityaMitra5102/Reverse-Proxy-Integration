@@ -111,7 +111,7 @@ def addToken(cid, tm, uid):
 			cursor.execute(command, tm, uid, cid)	
 			cursor.commit()
 		except:
-			pass
+			print('CANT ADD')
 
 def getCidFromToken(uid):
 	try:

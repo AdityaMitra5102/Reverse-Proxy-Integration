@@ -43,7 +43,6 @@ createTable()
 createStudentTable()
 createTokenTable()
 
-
 inp1=open(filepth+'fernetkey1.pkl', 'rb')
 key1=pickle.load(inp1)
 inp2=open(filepth+'fernetkey2.pkl', 'rb')
