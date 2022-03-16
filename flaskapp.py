@@ -117,18 +117,19 @@ def downloadattendance():
 	
 @app.route("/getportal")
 def getportal():
-	cid=0
+	cid='0'
 	try:
 		cid=request.cookies.get('cid')
 	except:
-		cid=0
+		cid='0'
 	setcookies=0
-	if cid==0:
+	if cid=='0':
 		setcookies=1
-		cid=random.randint(0,999999)
+		cidn=random.randint(0,999999)
+		cid=str(cidn)
 	now=datetime.now()
 	nowstr=now.strftime(dtformat)
-	x=str(cid)+'$'+nowstr
+	x=cid+'$'+nowstr
 	token=f1.encrypt(x.encode()).decode()
 	print(x)
 	if setcookies==0:
