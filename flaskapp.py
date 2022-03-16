@@ -87,7 +87,7 @@ def markattendance():
 	tm=xarr[1]
 	if timeValid(tm):
 		rnum=request.cookies.get('rnum')
-		return render_template("authenticate.html",rnum=rnum, cid=classid)
+		return render_template("authenticate.html",rnum=rnum, cid=cid)
 	else:
 		return render_template("error.html", reason='QR Code expired')
 	
