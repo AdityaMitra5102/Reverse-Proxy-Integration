@@ -93,6 +93,46 @@ def getEmail(reg):
 	except:
 		return "Error"
 
+def createTokenTable():
+	try:
+		cursor.execute("CREATE TABLE [Token](cid VARCHAR(10) UNIQUE, tm VARCHAR(10), uid VARCHAR(10))")
+		cursor.commit()
+	except:
+		pass
+
+def addToken(cid, tm, uid):
+	try:
+		command = 'INSERT INTO [Token] VALUES (?,?,?)'	
+		cursor.execute(command,cid, tm, uid)
+		cursor.commit()
+	except:
+		try:
+		command='UPDATE [Token] SET tm=?, uid=? WHERE cid=?'
+			cursor.execute(command, tm, uid, cid)	
+			cursor.commit()
+		except:
+			pass
+
+def getCidFromToken(uid):
+	try:
+		command='SELECT cid FROM [Token] WHERE uid=?'
+		cursor.execute(command,uid)
+		k=cursor.fetchone()[0]
+		cursor.commit()
+		return k
+	except:
+		return "00"
+		
+def getTimeFromToken(uid):
+	try:
+		command='SELECT tm FROM [Token] WHERE uid=?'
+		cursor.execute(command,uid)
+		k=cursor.fetchone()[0]
+		cursor.commit()
+		return k
+	except:
+		return "00"
+
 def dropStudentTable():
 	cursor.execute("DROP TABLE IF EXISTS [Student]")
 	cursor.commit()

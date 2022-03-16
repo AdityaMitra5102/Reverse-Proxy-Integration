@@ -10,6 +10,7 @@ from sqltasks import *
 from otp import *
 from os import path
 from datetime import *
+import shortuuid
 import pickle
 import string
 import random
@@ -40,7 +41,11 @@ if not path.exists(filepth+'fernetkey2.pkl'):
 		pickle.dump(Fernet.generate_key(),outp2,pickle.HIGHEST_PROTOCOL)
 createTable()
 createStudentTable()
-	
+createTokenTable()
+
+alphabet = string.ascii_lowercase + string.digits
+su = shortuuid.ShortUUID(alphabet=alphabet)
+
 inp1=open(filepth+'fernetkey1.pkl', 'rb')
 key1=pickle.load(inp1)
 inp2=open(filepth+'fernetkey2.pkl', 'rb')
@@ -81,10 +86,8 @@ def reginit():
 @app.route("/markattendance", methods=["GET"])
 def markattendance():
 	token=request.args.get('classId')
-	x=f1.decrypt(token.encode()).decode()
-	xarr=x.split('$')
-	cid=xarr[0]
-	tm=xarr[1]
+	cid=getCidFromToken(token)
+	tm=getTimeFromToken(token)
 	if timeValid(tm):
 		rnum=request.cookies.get('rnum')
 		return render_template("authenticate.html",rnum=rnum, cid=cid)
@@ -130,13 +133,14 @@ def getportal():
 		cid=str(cidn)
 	now=datetime.now()
 	nowstr=now.strftime(dtformat)
-	x=cid+'$'+nowstr
-	token=f1.encrypt(x.encode()).decode()
-	print(x)
+	
+	uid=su.random(length=8)
+	addToken(cid,nowstr,uid)
+
 	if setcookies==0:
-		return render_template("instructor.html",url=url,cid=token, cidplain=cid)
+		return render_template("instructor.html",url=url,cid=uid, cidplain=cid)
 	else:
-		resp=make_response(render_template("instructor.html",url=url,cid=token,cidplain=cid))
+		resp=make_response(render_template("instructor.html",url=url,cid=uid,cidplain=cid))
 		resp.set_cookie('cid',cid)
 		return resp
 		
