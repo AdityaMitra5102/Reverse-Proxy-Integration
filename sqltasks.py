@@ -107,7 +107,7 @@ def addToken(cid, tm, uid):
 		cursor.commit()
 	except:
 		try:
-		command='UPDATE [Token] SET tm=?, uid=? WHERE cid=?'
+			command='UPDATE [Token] SET tm=?, uid=? WHERE cid=?'
 			cursor.execute(command, tm, uid, cid)	
 			cursor.commit()
 		except:
