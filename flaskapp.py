@@ -81,7 +81,7 @@ def reginit():
 @app.route("/markattendance", methods=["GET"])
 def markattendance():
 	token=request.args.get('classId')
-	x=f1.decrypt(token).decode()
+	x=f1.decrypt(token.encode()).decode()
 	xarr=x.split('$')
 	cid=xarr[0]
 	tm=xarr[1]
