@@ -133,6 +133,10 @@ def getTimeFromToken(uid):
 	except:
 		return "00"
 
+def dropTokenTable():
+	cursor.execute("DROP TABLE IF EXISTS [Token]")
+	cursor.commit()
+
 def dropStudentTable():
 	cursor.execute("DROP TABLE IF EXISTS [Student]")
 	cursor.commit()
